@@ -41,18 +41,105 @@
 - 숫자형 뿐만 아니라 문자형도 덧셈연산 가능함
 
 ## 3. 대화상자
-- alert : 알려줌
+- alert() : 알려줌
     - 메시지를 보여줌
     - 확인을 누르기 전까지 계속 떠 있음
-- prompt : 입력 받음 
+- prompt() : 입력 받음 
     - 사용자에게 메시지를 보여주고 어떤 값을 입력받을 수 있는 필드를 제공함
     - 취소를 누르면 null을 반환 함
     - 디폴트 값 입력할 수 있음 prompt("메시지","입력 받을 디폴트 값")
     - 디폴트 값은 무언가를 안내하거나 힌트를 줄 때 유용하게 쓰일 수 있다
-- confirm : 확인 받음
+- confirm() : 확인 받음
     - 사용자 액션을 한번 더 확인시켜줄때 유용하게 쓰인다
     - 확인 버튼은 true / 취소 버튼은 false 를 반환한다.
 
 ### 단점
 - 스크립트 일시 정지
 - 스타일링이 불가하다 / 브라우저마다 모양이 조금씩 다름
+
+## 4. 형변환
+- Stirng() -> 문자형으로 변환
+- Number() -> 숫자형으로 변환
+- Boolean() -> 불린형으로 변환
+* prompt로 입력받은 값은 무조건 문자형
+    - -*/%는 자동형변환이 일어남
+- 명시적 형변환 기억해야할 특징
+    - Number("") 에 문자가 들어가게 되면 NaN
+    - Number(null) //0
+    - Number(undefined) //NaN
+    - Number(0) //false
+    - Number('0') //true
+    - Number('') //false
+    - Number(' ') //true
+
+    - Boolean() 에 0, 빈문자열'', null, undefined, NaN -> false / 나머지는 true 반환s
+
+## 5. 기본연산자
+- ( + - * / % )
+- 연산자 우선순위 * / 가 더 높음
+- % 나머지 연산으로 홀수 짝수 구분가능
+- += -= *= %= /= 가능
+- 증가연산자 num++ / ++num
+- 감소연산자 num-- / --num
+
+## 6. 비교연산자
+- ( < > <= >= == != )
+- true false 로 반환됨
+- 일치연산자 === ( 타입까지 비교함 )
+
+## 7. 조건문
+- if문
+    - if, else if, else
+
+## 8. 논리연산자
+- || : OR
+- && : AND
+- ! :NOT
+- 퍼센트가 낮은걸 앞에 배치하면 성능최적화에 도움을 줌
+- 우선순위 AND가 OR보다 높음
+
+## 9. 반복문
+- for 문
+- while 문
+- do.. while 문 : 적어도 1번은 꼭 실행함
+- 명확한 횟수가 정해져 있으면 for문 아니면 while문 사용
+
+- break : 멈추고 빠져나옴
+- continue : 멈추고 다음 반복으로 진행
+
+## 10. switch문
+- break와 같이 사용
+- default : if문의 else와 같은 것 
+
+## 11. 함수
+```javascript
+function sayHello(name){
+    console.log(`Hello, ${name}`);
+}
+
+sayHello('sujin');
+```
+
+```javascript
+// 매개변수 default값 설정
+function sayHello(name = 'friend'){
+    console.log(`Hello, ${name}`);
+}
+
+sayHellof();
+```
+- 코드 재사용성이 좋다
+- 유지보수가 쉽다
+
+- 전역변수와 지역변수 구분
+    - 매개변수로 받은 값은 복사된 후 함수의 지역변수가 된다.
+    - 전역변수가 많아지면 관리가 힘들기에 함수에 특화된 지역변수를 사용을 지향해라
+
+- return : 값 반환
+    - return 문이 없는 함수도 undefined를 반환함
+    - return 만 있는것
+        - undefined 반환
+        - 함수를 종료하는 목적으로도 쓰임
+
+- 한번에 한 작업에 집중하라.
+- 읽기 쉽고 어떤 동작인지 알 수 있게 네이밍해라.
