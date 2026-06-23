@@ -244,10 +244,111 @@
 // const result = add(2,3);
 // console.log(result);
 
-function showError(){
-    alert('에러가 발생했습니다.');
-    return;
-    alert('이코드는 절대 실행되지 않습니다');
+// function showError(){
+//     alert('에러가 발생했습니다.');
+//     return;
+//     alert('이코드는 절대 실행되지 않습니다');
+// }
+// const result = showError();
+// console.log(result);
+
+//객체
+// const superman = {
+//     name : 'clark',
+//     age : 30,
+// }
+
+// console.log(superman.name)
+// console.log(superman['age'])
+// console.log(superman)
+
+// superman.hairColor = 'black';
+// superman['hobby'] = 'football';
+// console.log(superman)
+
+// delete superman.age;
+// superman.hairColor = 'red';
+// console.log(superman)
+
+// function makeObject(name,age){
+//     return{
+//         name,
+//         age,
+//         hobby : 'football',
+//     }
+// }
+
+// const Mike = makeObject('Mike', 30);
+// console.log(Mike);
+
+// console.log('age' in Mike);
+// console.log('birthday' in Mike);
+
+// function isAdult(user){
+//     if(!('age' in user) || user.age < 20){
+//         return false;
+//     }
+//     return true;
+// }
+
+// const Mike = {
+//     name : 'Mike',
+//     age: 30,
+// }
+// const Jane = {
+//     name : 'Jane',
+// }
+
+// console.log(isAdult(Mike));
+// console.log(isAdult(Jane));
+
+
+// const Mike = {
+//     name: "Mike",
+//     age: 30,
+// }
+
+// for(x in Mike){
+//     console.log(Mike[x]) 
+
+// }
+
+// let boy = {
+//     name: "Mike",
+//     showName(){
+//         console.log(this.name)
+//     }
+// }
+
+// let man = boy; //하나의 객체가 두가지 이름을 갖는 것
+// //man.name = "Tom"
+
+// //console.log(boy.name)
+// //man.showName();
+
+// boy = null;
+// man.showName();
+
+// let boy = {
+//     name: "Mike",
+//     sayThis:() => {
+//         console.log(this);
+//     }
+// }
+// boy.sayThis();
+
+
+//배열
+let days = ["mon", 'tue','wed'];
+
+days.push("thu");
+days.unshift('sun');
+
+for(let i=0;i<days.length;i++){
+    console.log(days[i]);
 }
-const result = showError();
-console.log(result);
+
+for(let day of days){
+        console.log(day);
+
+}

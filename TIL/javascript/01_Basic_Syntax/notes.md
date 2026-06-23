@@ -67,10 +67,11 @@
     - Number("") 에 문자가 들어가게 되면 NaN
     - Number(null) //0
     - Number(undefined) //NaN
-    - Number(0) //false
-    - Number('0') //true
-    - Number('') //false
-    - Number(' ') //true
+
+    - Boolean(0) // false
+    - Boolean('0') // true
+    - Boolean('') //false
+    - Boolean(' ') //true
 
     - Boolean() 에 0, 빈문자열'', null, undefined, NaN -> false / 나머지는 true 반환s
 
@@ -126,7 +127,7 @@ function sayHello(name = 'friend'){
     console.log(`Hello, ${name}`);
 }
 
-sayHellof();
+sayHello();
 ```
 - 코드 재사용성이 좋다
 - 유지보수가 쉽다
@@ -143,3 +144,185 @@ sayHellof();
 
 - 한번에 한 작업에 집중하라.
 - 읽기 쉽고 어떤 동작인지 알 수 있게 네이밍해라.
+
+
+## 12. 함수 표현식
+- ```javascript
+    let sayHello = function(){
+        console.log('Hello');
+    }
+    ```
+- vs 함수 선언문
+    ```javascript
+        function sayHello(){
+            conssole.log('Hello');
+        }
+    ```
+
+- 실행하는 방식 , 동작하는 방식 동일
+- 함수 선언문 : 어디서든 호출 가능
+    - 자바스크립트는 초기에 모든 함수 선언문을 찾아서 생성해둠
+    - 호이스팅(hoisting)
+
+- 함수 선언문이 더 자유로움
+
+
+## 13. 화살표 함수
+
+- 더욱더 간결함 : function이라는 단어가 사라지고 화살표가 생김
+
+    ```javascript
+        let add = (num1,num2) => {
+            return num1 + num2;
+        }
+    ```
+
+- 리턴문은 return단어 제거 / 중괄호 -> 일반 괄호로 변경
+
+    ```javascript
+        let add = (num1,num2) => (
+            num1 + num2;
+        )     
+    ```
+
+- 리턴문이 한줄이면 괄호도 생략 가능
+
+    ```javascript
+        let add = (num1,num2) => num1 + num2; 
+
+    ```
+- 인수가 하나면 인수 괄호 생략 가능
+
+    ```javascript
+        let sayHello = name => `Hello, ${name}`;
+    ```
+- 만약 인수가 없는 함수이면 괄호를 생략할 수 없음
+
+    ```javascript
+        let showError = () => {
+            alert('error!');
+        }
+    ```
+
+- 리턴문 전에 여러줄의 코드가 있을 경우에는 일반괄호x , 중괄호 사용해야함
+    
+    ```javascript
+        let add = (num1,num2) => {
+            const result = num1 + num2;
+            return result;
+        }
+    ```
+
+
+## 14. 객체(Object)
+
+    ```javascript
+        const superman = {
+            name : 'clark',
+            age : 33,
+        }
+    ```
+
+- 접근
+    - 점 또는 대괄호
+    - superman.name
+    - superman['age']
+
+- 추가
+    - 점 또는 대괄호
+    - superman.gender = 'male';
+    - superman['hairColor'] = 'black';
+
+- 삭제
+    - delete superman.hairColor;
+
+```javascript
+    const name = 'clark';
+    const age = 33;
+
+    const superman = {
+        name,   //name: name
+        age,    //age: age
+        gender : 'male',
+    }
+```
+
+- 존재하지 않는 프로퍼티에 접근하면 error가 아닌 undefined가 나오게 된다.
+- in 연산자를 사용하면 프로퍼티가 있는지 확인 할 수 있음 : 어떤 값이 넘어올지 확신 할 수 없을 때 사용한다. (함수의 인자로 받거나 api통신을 통해 데이터를 받아 올 때)
+    ```javascript
+        const superman = {
+            name: 'clark',
+            age: 33,
+        }
+
+
+        superman.birthDay;
+        //undefined
+
+        'birthDay' in superman;
+        //false
+
+        'age' in superman;
+        //true
+    ```
+
+    ### for ... in 반복문
+        ```javascript
+            for(let key in superman){
+                console.log(key) 
+                console.log(superman[key])
+            }
+        ```
+
+    ### mathod
+    - 객체 프로퍼티로 할당 된 함수
+
+    ```javascript
+    const superman = {
+        name: 'clark',
+        age:30,
+        fly(){ // == fly : function(){}
+            console.log('날아갑니다.')
+        }
+    }
+    ```
+
+
+        #### this
+
+            ```javascript
+            //잘못된코드 예시
+            const user = {
+                name: 'Mike',
+                sayHello(){
+                    console.log(`Hello, I'm ${user.name}`);
+                }
+            }
+
+            //user. 자리에 this.
+            ```
+
+    * 화살표 함수는 일반함수와 달리 자신만의 this를 가지지 않음,
+        - 화살표 함수 내부에서 this를 사용하면, 그 this는 외부에서 값을 가져옴 (전역객체를 가리킴) (mathod 함수)
+
+## 15. 배열
+```javascript
+let students = ['','',...,''];
+
+students[0];
+```
+- 배열은 문자 뿐만 아니라, 숫자, 객체, 함수 등도 포함할 수 있음
+- length : 배열의 길이 students.length //뒤에 괄호 없어야함
+- push(): 배열 끝에 추가 students.push('')
+- pop() : 배열 끝 요소 삭제 students.pop()
+- unshift() : 배열 앞에 추가 students.unshift('')
+- shift() : 배열 앞 요소 삭제 students.shift()
+
+- 반복문 for : array.length 이용
+- 반복문 for ... of
+    ```javascript
+    for(let day of days){
+        console.log(day)
+    }
+    ```
+    - for 문 보다는 간단하지만 인덱스 활용을 못함
