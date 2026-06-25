@@ -77,3 +77,83 @@ function User(name, age){
 let user1 = new User('sujin',30);
 ```
 
+
+## 3. 객체 메소드(Object methods), 계산된 프로퍼티(Computed property)
+
+- 계산된 프로퍼티
+```javascript
+let a = 'age';
+
+const user = {
+    name : 'Mike';
+    [a] : 30 // age : 30
+}
+
+///////////////
+const user = {
+    [1+4] : 5,
+    ["안녕"+"하세요"] : "hello"
+}
+
+```
+
+- Methods
+    - Object.assign() : 객체 복제
+        
+        - const user2 = user -> 이런식으로 하면 user의 주소를 참조하므로 같은 공간을 바라보게 되는것
+        const newUser = object.assign({},user);
+        - {} + {name : Mike, age : 30} = 
+
+        - 병합을 할때 {} 안에있는 값의 키가 같다면 덮어쓰게됨
+
+        - 2개 이상의 객체도 합칠 수 있음
+            Object.assign(user,info1,info2)
+            user에 user info1 info2 가 합쳐지는 것
+
+    - Object.keys() : 키 배열 반환
+        ```javascript
+        const user = {
+            name : 'Mike',
+            age : 30,
+            gender : 'male',
+        }
+
+        Object.keys(user);
+        // ["name","age","gender"]
+        ```
+    - Object.values() : 값 배열 반환
+     ```javascript
+        const user = {
+            name : 'Mike',
+            age : 30,
+            gender : 'male',
+        }
+
+        Object.values(user);
+        // ["Mike",30,"male"]
+    ```
+
+    - Object.entries() : 키 & 값 배열 반환
+    ```javascript
+        const user = {
+            name : 'Mike',
+            age : 30,
+            gender : 'male',
+        }
+
+        Object.entries(user);
+        // [ [ "name", "Mike" ], ["age",30] , ["gender", "male"] ]
+    ```
+
+    - Object.fromEntries() : 키 & 값 배열을 객체로
+    ```javascript
+        const arr = [ [ "name", "Mike" ], ["age",30] , ["gender", "male"] ];
+
+        Object.fromEntries[arr];
+        <!-- {
+            name : 'Mike',
+            age : 30,
+            gender : 'male',
+        } -->
+    ```
+
