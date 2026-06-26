@@ -53,32 +53,56 @@
 
 
 
+// const user = {
+//     name : "Mike",
+//     age : 30,
+// }
+
+// const user2 = Object.assign({},user);
+// user2.name= "Tom";
+// console.log(user)
+// console.log(user2)
+
+
+// // const result = Object.keys(user);
+// // console.log(result)
+
+
+// // const result = Object.values(user);
+// // console.log(result)
+
+// // const result = Object.entries(user);
+// // console.log(result)
+
+
+// let arr = [
+//     ['mon','월'],
+//     ['tue','화'],
+// ]
+
+// const result = Object.fromEntries(arr);
+// console.log(result)
+
+// const a = Symbol();
+// const b = Symbol();
+
+// console.log(a)
+// console.log(b)
+// console.log(a === b)
+
+
 const user = {
-    name : "Mike",
-    age : 30,
+    name: "Mike",
+    age: 30,
 }
 
-const user2 = Object.assign({},user);
-user2.name= "Tom";
-console.log(user)
-console.log(user2)
+const showName = Symbol("show name");
+user[showName] = function(){
+    console.log(this.name);
+} 
 
+user[showName]();
 
-// const result = Object.keys(user);
-// console.log(result)
-
-
-// const result = Object.values(user);
-// console.log(result)
-
-// const result = Object.entries(user);
-// console.log(result)
-
-
-let arr = [
-    ['mon','월'],
-    ['tue','화'],
-]
-
-const result = Object.fromEntries(arr);
-console.log(result)
+for(let key in user){
+    console.log(`His ${key} is ${user[key]}`)
+}

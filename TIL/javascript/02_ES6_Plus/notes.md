@@ -157,3 +157,104 @@ const user = {
         } -->
     ```
 
+
+## 4. 심볼
+ 
+ - property jey : 문자형
+
+    ```javascript
+    const obj = {
+        1: '1입니다.',
+        false : '거짓'
+    }
+
+    Object.key(obj); // ["1","false"]
+
+    obj['1'] // "1입니다"
+    obj['false'] // "거짓"
+    ```
+- Symbol();
+    유일한 식별자를 만들 때 사용
+    ```javascript
+    const a = Symbol();
+    const b = Symbol();
+
+    console.log(a) // Symbol()
+    console.log(b) // Symbol()
+    console.log(a === b) //false
+    console.log(a == b) //false
+    ```
+    
+    - 유일성 보장
+        설명을 붙여줄수있음 : 디버깅할때 편리하다  
+        ```javascript
+        const id = Symbol('id');
+        const id2 = Symbol('id');
+        ```
+
+- property key : 심볼형
+```javascript
+const id = Symbol('id');
+const user = {
+    name : 'Mike',
+    age : 30,
+    [id] : 'myid'
+}
+
+// {name:"Mike", age:30, Symbol(id): "myid"}
+// user[id] //"myid"
+
+Object.keys(user); //["name","age"] name이랑 age만 나옴
+//객체메소드 : 키가 심볼형인 프로퍼티는 건너뜀
+```
+
+- 특정 객체에 원본 데이터는 건드리지 않고 속성을 추가할 때 씀
+```javascript
+const user = {
+    name : 'Mike',
+    age : 30,
+}
+const id = Symbol('id');
+user[id] = "myid";
+```
+
+- 심볼은 이름이 같더라도 모두 다른존재임
+- But 전역변수처럼 이름이 같으면 같은 객체를 가리켜야 될때가 있음 -> Symbol.for() : 전역 심볼
+    - 하나의 심볼만 보장받을 수 있음
+    - 없을면 만들고, 있으면 가져오기 때문
+    - Symbol함수는 매번 다른 Symbol값을 생성하지만,
+    - Symbol.for 메소드는 하나를 생성한 뒤 키를 통해 같은 Symbol을 공유
+    ```javascript
+        const id = Symbol('id');
+        const id2 = Symbol('id');
+
+        console.log(a === b) //true
+    ```
+
+    - 이름을 얻고싶으면
+        ```javascript
+        Symbol.keyFor(id1) //"id"
+        ```
+        - 전역 심볼이 아닌 심볼은 keyFor을 사용할 수 없음
+        - 대신 description으로 이름을 알 수 있음
+        ```javascript
+        const id = Symbol('id 입니다.');
+        id.description; // "id 입니다"
+
+        ```
+
+    - 숨겨진 Symbol key 보는법
+     ```javascript
+        const id = Symbol('id');
+
+        const user = {
+            name : 'Mike',
+            age : 30,
+            [id] : 'myid'
+        }
+
+        Object.getOwnPropertySymbols(user); // > [Symbol(id)]
+        
+        Reflect.ownKeys(user); // > ["name","age",Symbol(id)]
+        // 심볼형 키를 포함한 객체의 모든 키를 보여줌
+    ```
