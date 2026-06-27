@@ -158,7 +158,7 @@ const user = {
     ```
 
 
-## 4. 심볼
+## 4. 심볼(Symbol)
  
  - property jey : 문자형
 
@@ -258,3 +258,105 @@ user[id] = "myid";
         Reflect.ownKeys(user); // > ["name","age",Symbol(id)]
         // 심볼형 키를 포함한 객체의 모든 키를 보여줌
     ```
+
+## 5. 숫자, 수학 method(Number,Math)
+    - toString()
+        10진수 -> 2진수/16진수
+
+        ```javascript
+        let num = 10;
+        
+        num.toString(); // "10"
+        num.toString(2); // "1010"
+
+        let num2 = 255;
+
+        num2.toString(16); // "ff"
+        ```
+    
+    - Math
+        Math.PI : 원주율
+        Math.ceil() : 올림
+        Math.floor() : 내림
+        Math.round() : 반올림
+
+        - 소수점 자릿수 : toFixed()
+
+        ```javascript
+        let userRate = 30.1234;
+        // 요구사항 : 소수점 둘째자리 까지 표현(셋째 자리에서 반올림) -> 30.12
+        
+        // 방법1
+        Math.round(userRate * 100)/100 // 30.12
+
+        // 방법2
+        userRate.toFixed(2); // "30.12"
+
+        // 만약 0이거나 기존 소수부분 개수보다 크면?
+        userRate.toFixed(0);  "30" // 정수부분만 남음
+        userRage.toFixed(6); "30.123400" // 0으로 채워줌
+
+        Number(userRage.toFIxed(2)); // 30.12
+
+        ```
+        toFixed() 는 문자열을 반환함 : Number를 이용해 숫자로 변환해야함
+        
+    - isNaN() : NaN인지 아닌지 판단
+
+    ```javascript
+    let x = Number('x'); // NaN
+
+        x == NaN // false
+        x === Nan // false
+        NaN == NaN // false
+
+            isNaN(x) // true
+            isNaN(3) // false
+    ```
+
+    - parseInt() : 문자열을 숫자로 바꿔줌 (Number와 다른점은 문자가 혼용되어있어도 동작함) , 숫자로 시작해야함 , 2번째 인수
+
+    ```javascript
+    let margin = '10px';
+
+    parseInt(margin); // 10
+    Number(margin); // NaN
+
+    let redColor = 'f3';
+    parseInt(redColor); // NaN
+    parseInt(redColor, 16); //243 (16진수에서 10진수로)
+
+    parseInt('11',2) // 3  (2진수에서 10진수로)
+    ```
+
+    - parseFloat() : 부동소숫점을 반환
+
+    ```javascript
+    let padding = '18.5%';
+
+    parseInt(padding); // 18
+    parseFloat(padding); // 18.5
+    ```
+
+    - Math.random() : 0~1 사이 무작위 숫자 생성
+        * 1 ~ 100 사이 임의의 숫자를 뽑고 싶다면? 
+
+        ```javascript
+        Math.floor(Math.random()*100)+1
+        ```
+         
+    - Math.max() / Math.min() : 최대값 최소값
+
+    ```javascript
+    Math.max(1,4,-1,5,10,9,5.54); // 10
+    Math.min(1,4,-1,5,10,9,5.54); // -1
+    ```
+
+    - Math.abs() : 절대값
+        Math.abs(-1) // 1
+
+    - Math.pow(n,m) : n의 m제곱
+        Math.pow(2, 10) // 1024
+
+    - Math.sqrt() : 제곱근
+        Math.sqrt(16) // 4
