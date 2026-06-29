@@ -657,3 +657,373 @@ typeof는 객체와 배열이 구분이 안감 : 둘다 object라고뜸
     ```
 
     - arr.reduceRight() : 배열 우측 부터 reduce를 수행
+
+
+## 9. 구조 분해 할당 (Destructuring assignment)
+
+- 객체의 속성을 분해해서 그 값을 변수에 담을 수 있게 하는 표현식
+
+
+- 배열 구조 분해
+    
+    ```javascript
+    let [x,y] = [1,2];
+    console.log(x); // 1
+    console.log(y); // 2
+
+
+
+    let users = ['Mike', 'Tom', 'Jane'];
+    let [user1, user2, user3] = users;
+
+    console.log(user1); // 'Mike'
+    console.log(user2); // 'Tom'
+    console.log(user3); // 'Jane'
+
+
+
+    // split
+    let str = "Mike-Tom-Jane";
+    let [user1,user2,user3] = str.split('-');
+
+    console.log(user1); // 'Mike'
+    console.log(user2); // 'Tom'
+    console.log(user3); // 'Jane'
+
+
+    // 기본값
+    let [a,b,c] = [1,2]; // c는 undefined
+    let [a=3, b=4, c=5] = [1,2];
+
+
+    // 일부 반환값 무시 ,, 쉼표사용
+    let [user1, ,user2] = ['Mike', 'Tom', 'Jane', 'Tony'];
+
+    console.log(user1); // 'Mike'
+    console.log(user2); // 'Jane'
+
+    // 바꿔치기 : temp변수 안써도됨
+    [a, b] = [b, a];
+    ```
+
+- 객체 구조 분해
+```javascript
+let user = {name: 'Mike', age: 30};
+let {name, age} = user;
+// = let name = user.name;
+//   let age = user.age;
+let {age. name} = user; // 순서바꿔도 가능함
+
+console.log(name); // 'Mike'
+console.log(age); // 30
+
+ 
+
+// 새로운 변수 이름으로 할당
+let user = {name: 'Mike', age: 30};
+let {name: userName, age: userAge} = user;
+console.log(userName); // 'Mike'
+console.log(userAge); // 30
+
+// 기본값
+let user = {name: 'Mike', age: 30};
+let{name,age,gender} = user; // gender는 undefined
+let {name, age, gender = 'male'} = user;
+// 객체로부터 받은 값이 undefined일때만 기본값이 사용
+```
+
+## 10. 나머지 매개변수, 전개 구문(Rest parameters, Spread syntax)
+
+- ...
+
+```javascript
+// 인수 전달
+function showName(name){
+    // 전달할 인수 개수 제한 없음
+    console.log(name);
+}
+showName('Mike'); // 'Mike'
+showName('Mike', 'Tom'); // ?
+
+showName(); // undefined
+
+// 1, arguments
+// 2. 나머지 매개 변수
+// 화살표 함수엔 arguments가 없음
+```
+
+
+- arguments
+    - 함수로 넘어 온 모든 인수에 접근
+    - 함수내에서 이용 가능한 지역 변수
+    - length / index
+    - Array 형태의 객체
+    - 배열의 내장 메서드 없음 (forEach, map)
+
+    ```javascript
+    function showName(name){
+        console.log(arguments.length);
+        console.log(arguments[0]);
+        console.log(arguments[1]);
+    }
+    showName('Mike','Tom');
+    // 2
+    // 'Mike'
+    // 'Tom'
+    ```
+
+- 나머지 매개변수(Rest parameters)
+    - 정해지지 않은 개수의 인수를 배열로 나타낼수있게함
+    - (...배열이름)
+    - 배열의 메소드들 사용할 수 있다는 장점이 있음
+
+    ```javascript
+    function showName(...names){
+        console.log(names);
+    }
+
+    showName(); // []
+    showName('Mike'); // ['Mike']
+    showName('Mike','Tom'); // ['Mike', 'Tom']
+    ```
+    
+    - user 객체를 만들어 주는 생성자 함수 
+        * 나머지 매개변수는 마지막에 있어야함
+
+    ```javascript
+    function User(name, age, ...skills){
+        this.name = name;
+        this.age = age;
+        this.skills = skills;
+    }
+
+    const user1 = new User('Mike', 30, 'html','css');
+    const user2 = new User('Tom', 20, 'JS','React');
+    const user3 = new User('Jane', 10, 'English' );
+
+    console.log(user1);
+    console.log(user2);
+    console.log(user3);
+
+    ```
+
+
+- 전개 구문(Spread syntax) : 배열
+```javascript
+let arr1 = [1,2,3];
+let arr2 = [4,5,6];
+
+let result = [...arr1, ...arr2]; // [1,2,3,4,5,6]
+let result2 = [0, ...arr1, ...arr2, 7, 8, 9]; // [0,1,2,3,4,5,6,7,8,9]
+console.log(result);
+
+// push() splice() concat() 안써도돼서 간편함
+```
+
+
+- 전개 구문(Spread syntax) : 복제
+
+```javascript
+let arr = [1,2,3];
+let arr2 = [...arr]; // [1,2,3]
+
+let user = {name: 'Mike', age: 30};
+let uesr2 = {...user};
+
+user2.name = "Tom";
+
+console.log(user.name); // "Mike"
+console.log(user2.name); // "Tom"
+```
+
+
+## 11. 클로저 (Closure)
+
+- 어휘적 환경 (Lexical Environment)
+```javascript
+let one;
+one = 1;
+
+function addOne(num){ 
+    console.log(one + num);
+}
+
+addOne(5);
+//스크립트 내에서 선언된 변수들이 Lexical 환경에 올라감
+// one : 초기화X 사용불가
+// addOne : function 함수선언문은 바로 초기화됨, 사용가능
+
+
+// 내부 Lexical 환경에서 먼저 찾고 없으면 전역 Lexical에서 찾음
+```
+
+
+```javascript
+function makeAdder(x){
+    return function(y){
+        return x + y;
+    }
+}
+
+const add3 = makeAdder(3);
+console.log(add3(2)); // 5 
+// add3 함수가 생성된 이후에도 상위함수인 makeAdder의 x에 접근 가능
+
+const add10 = makeAdder(10);
+console.log(add10(5)); // 15
+console.log(add3(1)); // 4 
+// add10 과 add3은 서로 다른 환경을 가지고 있는 것
+```
+
+- Closure란?
+    함수와 렉시컬 환경의 조합
+    함수가 생성될 당시의 외부 변수를 기억
+    생성 이후에도 계속 접근 가능
+    은닉화가 가능하게끔 만들 수 있다
+
+
+## 12. setTimeout / setInterval
+
+- setTimeout : 일정 시간이 지난 후 함수를 실행
+
+setTimeout(실행할 함수, 시간)
+```javascript
+function fn(){
+    console.log(3);
+}
+setTimeout(fn,3000); //3000은 3s를 의미
+
+
+setTimeout(function(){
+    console.log(3)
+},3000);
+
+
+//전달할 인수가 있다면
+const tId = function showName(name){
+    console.log(name);
+}
+
+setTimeout(showName, 3000, 'Mike');
+
+```
+
+- clearTimeout(tId);
+    예정된 작업을 없앰
+    setTimeout은 tId를 반환하는데 이를 이용하면 스케쥴링을 취소할 수 있다
+
+
+- setInterval : 일정 시간 간격으로 함수를 반복
+    사용방법은 setTimeout과 동일
+```javascript
+function showName(name){
+    console.log(name);
+}
+
+const tId = setInterval(showName, 3000, 'Mike');
+```
+    중단하려면 clearInterval(tId) 실행하면됨
+
+* 현재 실행중인 스크립트가 종료된 이후에 스케줄링 함수를 실행
+    브라우저는 4ms 정도의 대기시간이 있기에 0이라고 적어도 바로 되지않음
+
+    ```javascript
+    setTimeout(function(){
+        console.log(2); // 이건 나중에 찍힘
+    }, 0);
+    console.log(1); // 이게 먼저찍힌다음
+    ```
+
+## 13 call, apply, bind
+
+- call, applu, bind : 함수 호출 방식과 관계없이 this 를 지정할 수 있음
+
+- call 메서드 
+    : 모든 함수에서 사용가능 , this를 특정 값으로 지정할 수 있음
+
+```javascript
+const mike = {
+    name : "Mike",
+}
+
+const tom = {
+    name : "Tom",
+}
+
+function showThisName(){
+    console.log(this.name);
+}
+
+showThisName(); // 이때 this는 윈도우를 가리킴
+showThisName.call(mike); // "Mike"
+showThisName.call(tom); // "tom"
+
+
+function update(birthYear, occupation){
+    this.birthYear = birthYear;
+    this.occupation = occupation;
+}
+
+update.call(mike,2004,'singer')
+console.log(mike);
+
+update.call(tom,1994,'teacher')
+console.log(tom);
+```
+call의 첫번쨰 매개변수 : this로 사용 할 값
+call의 뒤에 따라오는 매개변수 : 그 매개변수를 호출하는 함수로 전달됨
+
+
+- apply 
+    : 함수 매개변수를 처리하는 방법을 제외하면 call과 완전히 동일하다
+    call은 일반적인 함수와 마찬가지로 매개변수를 직접 받지만, apply는 매개변수를 배열로 받음
+
+    - 배열 요소를 함수 매개변수로 사용할때 유용하다
+    ```javascript
+    const nums = [3,10,1,6,4];
+    // const minNum = Math.min(...nums);
+    // const maxNum = Math.max(...nums);
+
+    const minNum = Math.min.apply(null,nums);
+    const maxNum = Math.max.call(null, ...nums);
+
+    console.log(minNum);
+    console.log(maxNum);
+    ```
+
+- bind 
+    : 함수의 this 값을 영구히 바꿀 수 있다.
+```javascript
+const mike = {
+    name : "Mike",
+}
+
+function update(birthYear, occupation){
+    this.birthYear = birthYear;
+    this.occupation = occupation;
+}
+
+const updateMike = update.bind(mike);
+
+updateMike(1980, "police");
+console.log(mike);
+```
+
+```javascript
+const user = {
+    name: "Mike",
+    showName: function(){
+        console.log(`hello, ${this.name}`);
+    },
+};
+user.showName(); // hello, Mike
+let fn = user.showName;
+fn() // hello
+
+
+fn.call(user);
+fn.apply(user);
+
+let boundFn = fn.bind(user);
+boundFn();
+```

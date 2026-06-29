@@ -212,18 +212,175 @@
 // console.log(result)
 
 
-let userList = [
-    { name : "Mike", age: 30},
-    { name : "Jane", age: 27},
-    { name : "Tom", age: 10},
-    { name : "Sue", age: 14},
-    { name : "Marry", age: 50},
-    { name : "Steve", age: 32},
-]
+// let userList = [
+//     { name : "Mike", age: 30},
+//     { name : "Jane", age: 27},
+//     { name : "Tom", age: 10},
+//     { name : "Sue", age: 14},
+//     { name : "Marry", age: 50},
+//     { name : "Steve", age: 32},
+// ]
 
-let result = userList.reduce((prev,cur) =>{
-    if(cur.age > 19) prev.push(cur.name);
-    return prev;
-}, 0)
+// let result = userList.reduce((prev,cur) =>{
+//     if(cur.age > 19) prev.push(cur.name);
+//     return prev;
+// }, 0)
 
-console.log(result)
+// console.log(result)
+
+// function add(...numbers){
+//     let result =0;
+//     numbers.forEach((num) => (result += num));
+//     console.log(result);
+// }
+// add(1,2,3);
+// add(1,2,3,4,5,6,7,8,9,10);
+
+
+
+// function User(name, age, ...skills){
+//         this.name = name;
+//         this.age = age;
+//         this.skills = skills;
+// }
+
+// const user1 = new User('Mike', 30, 'html','css');
+// const user2 = new User('Tom', 20, 'JS','React');
+// const user3 = new User('Jane', 10, 'English' );
+// console.log(user1);
+// console.log(user2);
+// console.log(user3);
+
+
+// let arr1 = [1,2,3];
+// let arr2 = [4,5,6];
+// // arr2.reverse.forEach(num => {
+// //     arr1.unshift(num);
+// // })
+// arr1 = [...arr2, ...arr2];
+// console.log(arr1); // [4,5,6,1,2,3]
+
+
+
+// let user = {name:"Mike"};
+// let info = {age:30};
+// let fe = ["JS", "React"];
+// let lang = ["Korean", "English"];
+
+
+// user = Object.assign({}, 
+//     user,
+//     info,
+//     {
+//         skills : []
+//     }
+// )
+// fe.forEach(item => {
+//     user.skills.push(item);   
+// })
+
+// lang.forEach(item => {
+//     user.skills.push(item);   
+// })
+
+// user = {
+//     ...user,
+//     ...info,
+//     skills : [...fe, ...lang],
+// }
+// console.log(user);
+
+
+// function makeCounter(){
+//     let num = 0; // 은닉화
+//     return function(){
+//         return num++;
+//     };
+// }
+// let counter = makeCounter();
+// console.log(counter()); // 0
+// console.log(counter()); // 1
+// console.log(counter()); // 2
+
+
+// let num = 0;
+// function showTime(){
+//     console.log(`안녕하세요, 접속하신지 ${num++}초가 지났습니다.`);
+//     if(num > 5) {
+//         clearInterval(tId);
+//     }
+// }
+// const tId = setInterval(showTime,1000);
+
+
+// const mike = {
+//     name : "Mike",
+// }
+
+// const tom = {
+//     name : "Tom",
+// }
+
+// function showThisName(){
+//     console.log(this.name);
+// }
+
+// showThisName(); // 이때 this는 윈도우를 가리킴
+// showThisName.call(mike); // "Mike"
+// showThisName.call(tom); // "tom"
+
+
+// function update(birthYear, occupation){
+//     this.birthYear = birthYear;
+//     this.occupation = occupation;
+// }
+
+// update.apply(mike,[2004,'singer'])
+// console.log(mike);
+
+// update.apply(tom,[1994,'teacher'])
+// console.log(tom);
+
+
+// const nums = [3,10,1,6,4];
+// // const minNum = Math.min(...nums);
+// // const maxNum = Math.max(...nums);
+
+// const minNum = Math.min.apply(null,nums);
+// const maxNum = Math.max.call(null, ...nums);
+
+// console.log(minNum);
+// console.log(maxNum);
+
+
+// const mike = {
+//     name : "Mike",
+// }
+
+// function update(birthYear, occupation){
+//     this.birthYear = birthYear;
+//     this.occupation = occupation;
+// }
+
+// const updateMike = update.bind(mike);
+
+// updateMike(1980, "police");
+// console.log(mike);
+
+
+const user = {
+    name: "Mike",
+    showName: function(){
+        console.log(`hello, ${this.name}`);
+    },
+};
+user.showName(); // hello, Mike
+let fn = user.showName;
+fn() // hello
+
+
+fn.call(user); // hello, Mike
+fn.apply(user); // hello, Mike
+
+let boundFn = fn.bind(user);
+boundFn(); // hello, Mike
