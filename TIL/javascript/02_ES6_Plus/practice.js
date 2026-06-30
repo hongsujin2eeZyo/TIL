@@ -368,19 +368,55 @@
 // console.log(mike);
 
 
-const user = {
-    name: "Mike",
-    showName: function(){
-        console.log(`hello, ${this.name}`);
-    },
-};
-user.showName(); // hello, Mike
-let fn = user.showName;
-fn() // hello
+// const user = {
+//     name: "Mike",
+//     showName: function(){
+//         console.log(`hello, ${this.name}`);
+//     },
+// };
+// user.showName(); // hello, Mike
+// let fn = user.showName;
+// fn() // hello
 
 
-fn.call(user); // hello, Mike
-fn.apply(user); // hello, Mike
+// fn.call(user); // hello, Mike
+// fn.apply(user); // hello, Mike
 
-let boundFn = fn.bind(user);
-boundFn(); // hello, Mike
+// let boundFn = fn.bind(user);
+// boundFn(); // hello, Mike
+
+ const car = {
+        wheels: 4,
+        drive(){
+            console.log("drive..");
+        },
+    };
+
+    const bmw = {
+        coloer: "red",
+        navigation: 1,
+    };
+    const benz = {
+        color: "black",
+    }
+    const audi ={
+        coloer: "blue",
+    };
+
+    bmw.__proto__ = car;
+    benz.__proto__ = car;
+    audi.__proto__ = car;
+
+    const x5 = {
+        coloer: "white",
+        name: "x5",
+    };
+    x5.__proto__ = benz;
+
+    for(p in x5){
+        if(x5.hasOwnProperty(p)){
+            console.log('o',p);
+        }else{
+            console.log('x',p);
+        }
+    }

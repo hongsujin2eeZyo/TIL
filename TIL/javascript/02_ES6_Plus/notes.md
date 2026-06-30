@@ -934,7 +934,7 @@ const tId = setInterval(showName, 3000, 'Mike');
     console.log(1); // 이게 먼저찍힌다음
     ```
 
-## 13 call, apply, bind
+## 13. call, apply, bind
 
 - call, applu, bind : 함수 호출 방식과 관계없이 this 를 지정할 수 있음
 
@@ -1027,3 +1027,98 @@ fn.apply(user);
 let boundFn = fn.bind(user);
 boundFn();
 ```
+
+## 14. 상속, 프로토타입 (Prototype)
+
+- 객체에는 자신이 프로퍼티를 가지고 있는지 확인하는 메소드가 있음
+    - hasOwnProperty();
+
+    - __proto__ : 프로토타입
+    - 객체에 찾는 프로퍼티가 있으면 거기서 탐색을 하고 없을때만 프로토타입에서 프로퍼티를 찾는것
+
+    ```javascript
+    const car = {
+        wheels: 4,
+        drive(){
+            console.log("drive..");
+        },
+    };
+
+    const bmw = {
+        coloer: "red",
+        navigation: 1,
+    };
+    const benz = {
+        color: "black",
+    }
+    const audi ={
+        coloer: "blue",
+    };
+
+    bmw.__proto__ = car;
+    benz.__proto__ = car;
+    audi.__proto__ = car;
+
+    const x5 = {
+        coloer: "white",
+        name: "x5",
+    };
+    x5.__proto__ = benz;
+
+    for(p in x5){
+        if(x5.hasOwnProperty(p)){
+            console.log('o',p);
+        }else{
+            console.log('x',p);
+        }
+    }
+
+    // Prototype Chain 
+    // key와 value는 상속된 정보는 나오지 않음
+    ```
+
+    ```javascript
+    // 생성자함수와 사용
+    // .prototype.을 이용하면 중복 코드를 줄일 수 있다
+    const Bmw = funciton(color){
+        this.color =color;
+    };
+
+    Bmw.prototype.wheels = 4;
+    Bmw.prototype.drive = function(){
+        console.log("drive..");
+    }
+
+    <!-- Bmw.prototype = {
+        constructor: Bmw,
+        wheels: 4.
+        drive() {
+            console.log("drive...");
+        },
+        navigation: 1,
+        stop(){
+            console.log("STOP!")
+        }
+    } -->
+    //이 방법을 쓰면 constructor가 false로 나옴
+
+    const x5 = new Bmx("red");
+    const z4 = new Bmw("blue");
+    ```
+
+    - instanceof 
+    - constructor === 
+
+    - 자바스크립트는 명확한 constructor를 보장하진 않음, 개발자에 의해 언제든지 수정 될 수 있음
+
+    ```javascript
+    // 외부에 의해 수정 불가, 생성될 당시 context를 기억하는 것
+    const Bmw = function (color){
+        const c = color;
+        this.getColor = function(){
+            console.log(c);
+        };
+    };
+
+    const x5 = new Bmw("red");
+    ```
