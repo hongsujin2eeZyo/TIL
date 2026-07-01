@@ -385,38 +385,104 @@
 // let boundFn = fn.bind(user);
 // boundFn(); // hello, Mike
 
- const car = {
-        wheels: 4,
-        drive(){
-            console.log("drive..");
-        },
-    };
+//  const car = {
+//         wheels: 4,
+//         drive(){
+//             console.log("drive..");
+//         },
+//     };
 
-    const bmw = {
-        coloer: "red",
-        navigation: 1,
-    };
-    const benz = {
-        color: "black",
-    }
-    const audi ={
-        coloer: "blue",
-    };
+//     const bmw = {
+//         coloer: "red",
+//         navigation: 1,
+//     };
+//     const benz = {
+//         color: "black",
+//     }
+//     const audi ={
+//         coloer: "blue",
+//     };
 
-    bmw.__proto__ = car;
-    benz.__proto__ = car;
-    audi.__proto__ = car;
+//     bmw.__proto__ = car;
+//     benz.__proto__ = car;
+//     audi.__proto__ = car;
 
-    const x5 = {
-        coloer: "white",
-        name: "x5",
-    };
-    x5.__proto__ = benz;
+//     const x5 = {
+//         coloer: "white",
+//         name: "x5",
+//     };
+//     x5.__proto__ = benz;
 
-    for(p in x5){
-        if(x5.hasOwnProperty(p)){
-            console.log('o',p);
-        }else{
-            console.log('x',p);
-        }
-    }
+//     for(p in x5){
+//         if(x5.hasOwnProperty(p)){
+//             console.log('o',p);
+//         }else{
+//             console.log('x',p);
+//         }
+//     }
+
+//  class Car{
+//         constructor(color){
+//             this.color = color;
+//             this.wheels = 4;
+//         }
+//         drive(){
+//             console.log("drive..");
+//         }
+//         stop(){
+//             console.log("STOP!");
+//         }
+//     }
+//     class Bmw extends Car {
+//         park(){
+//             console.log("PARK");
+//         }
+//         stop(){
+//             super.stop();
+//             console.log("OFF")
+//         }
+//     }
+// const z4 = new Bmw("blue");
+
+// z4.stop();
+
+// const pr = new Promise((resolve, reject)=>{
+//     setTimeout(()=>{
+//         //resolve("OK");
+//         reject(new Error("err...."));
+//     },1000);
+// });
+
+// console.log('시작')
+// pr.then((result)=>{
+//     console.log(result);
+// }).catch((err)=>{
+//     console.log(err);
+// }).finally(()=>{
+//     console.log('끝');
+// })
+
+
+const f1 = (callback) =>{
+    setTimeout(function(){
+        console.log("1번 주문 완료");
+        callback();
+    },1000);
+};
+
+const f2 = (callback) =>{
+    setTimeout(function(){
+        console.log("2번 주문 완료");
+        callback();
+    },3000);
+};
+
+
+const f3 = (callback) =>{
+    setTimeout(function(){
+        console.log("3번 주문 완료");
+        callback();
+    },2000);
+};
+
+console.log('시작');

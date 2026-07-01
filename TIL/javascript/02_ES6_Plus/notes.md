@@ -1122,3 +1122,237 @@ boundFn();
 
     const x5 = new Bmw("red");
     ```
+
+
+## 15. 클래스 (Class)
+
+```javascript
+const Usser = function (name, age){
+    this.name = name;
+    this.age = age;
+    // this.showName = function (){
+    //     console.log(this.name);
+    // };
+};
+User.prototype.showName = function(){
+    console.log(this.name);
+}
+const mike = new User("Mike",30);
+
+//
+class User2 {
+    constructor(name, age){
+        this.name = name;
+        this.age = age;
+    }
+    showName(){
+        console.log(this.name)
+    }
+}
+const tom = new User2("Tom", 19);
+```
+- 차이점
+    - class라는 키워드를 사용
+    - 내부에 constructor가 있음 : 객체를 만들어주는 생성자 메소드임, 객체를 초기화 해주는 코드 
+    - showName()처럼 클래스 내에서 정의한 메소드는 User2의 프로토타입에 저장된다
+    - mike는 객체 내부에 showName()이 있고 , tom은 프로토타입 내부에 showName()이 있음
+    - class는 new없이 실행할 수 없음 : constructor가 class라는 것을 알 수 있음
+    - class로 생성된 객체는 프로토타입 내부에있는 showName()은 for..in 문에서 찾을 수 없음
+
+
+
+- 클래스 상속
+    - extends
+    ```javascript
+    class Car{
+        constructor(color){
+            this.color = color;
+            this.wheels = 4;
+        }
+        drive(){
+            console.log("drive..");
+        }
+        stop(){
+            console.log("STOP!");
+        }
+    }
+    class Bmw extends Car {
+        park(){
+            console.log("PARK");
+        }
+    }
+    const z4 = new Bmw("blue");
+
+    // 상속받은것은 프로토타입안에 들어가있음
+    ```
+
+- 메소드 오버라이딩 (method overriding)
+    - 상속받은 클래스에서 정의한 메소드와 동일한 이름의 메소드가 존재한다면 ? 
+    ```javascript
+    class Car{
+        constructor(color){
+            this.color = color;
+            this.wheels = 4;
+        }
+        drive(){
+            console.log("drive..");
+        }
+        stop(){
+            console.log("STOP!");
+        }
+    }
+    class Bmw extends Car {
+        park(){
+            console.log("PARK");
+        }
+        stop(){
+            console.log("OFF!")
+        }
+    }
+    const z4 = new Bmw("blue");
+    ```
+    - 덮어쓰게됨! : 만약 부모의 메소드를 그대로 사용하면서 확장하고싶다면? : super.
+    ```javascript
+    class Car{
+        constructor(color){
+            this.color = color;
+            this.wheels = 4;
+        }
+        drive(){
+            console.log("drive..");
+        }
+        stop(){
+            console.log("STOP!");
+        }
+    }
+    class Bmw extends Car {
+        park(){
+            console.log("PARK");
+        }
+        stop(){
+            super.stop();
+            console.log("OFF!")
+        }
+    }
+    const z4 = new Bmw("blue");
+    ```
+
+    -> 이런 방식을 오버라이딩이라고 함 (super.)
+
+
+- 생성자 오버라이딩 (overriding)
+```javascript
+class Car {
+    constructor(color){
+        this.color = color;
+        this,wheels = 4;
+    }
+    drive(){
+        console.log("drive..");
+    }
+    stop(){
+        console.log("STOP!");
+    }
+}
+class Bmw extends Car {
+    constructor(color){ // 인수를 받는다면 받고 넘겨줘야함
+        super(color); // 부모의 constructor를 먼저 실행해줘야함 : super();
+        this.navigation = 1;
+    }
+    park(){
+        console.log("PARK");
+    }
+}
+const z4 = new Bmw("blue");
+
+
+//constructor가 없으면 이런식으로 동작
+class Bmw extends Car {
+    constructor(...args){
+        super(...args);
+    }
+    park(){
+        coonsole.log("PARK");
+    }
+}
+```
+- 자식에서 constructor를 사용하려면
+    1. super()를 이용해서 호출
+    2. 인수값을 제대로 넘겨줘야함
+
+
+# 16. 프로미스 (Promise)
+- 비동기 작업의 결과를 넘겨줌
+```javascript
+const pr = new Promise((resolve, reject) =>{
+    // code
+});
+```
+- callback 함수
+    - resolve : 성공한 경우 실행되는 함수
+    - reject : 실패했을 때 실행되는 함수
+
+- new Promise
+    - state : pending(대기)
+    - result : undefined 
+
+    resolve(value)기 호출되면 
+    - state : fulfilled(이행됨)
+    - result : value
+
+    reject(error)가 호출되면
+    - state : rejected(거부됨)
+    - result : error
+
+- 판매자의 코드
+```javascript
+const pr = new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+        resolve('OK')
+    }, 3000)
+});
+// 초기 pending 이였다가 3초 후에 fulfilled로 바뀌고 results는 'OK'
+
+const pr = new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+        reject(new Error('error'))
+    }, 3000)
+});
+// 초기 pending 이였다가 3초 후에 rejected로 바뀌고 result는 error가 됨
+```
+
+- 소비자의 코드
+```javascript
+const pr = new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+        resolve('OK')
+    }, 3000)
+});
+
+pr.then(
+    function(result){}, // -> Promise가 이행 되었을 때 실행 , result에 'OK'가 들어오는 것
+    function(err){} // -> 거부 되었을 때 실행 , err에는 error값이 들어오게됨
+);
+
+pr.then(
+    function(reslt){
+        console.log(result + ' 가지러 가자.');
+    },
+    function(err){
+        console.log('다시 주문해주세요..');
+    }
+)
+
+pr.then(
+    function(result){}
+).catch(
+    function(err){}
+).finally(
+    function(){
+        console.log('--- 주문 끝 ---')
+    }
+)
+```
+- then을 이용해서 resolve와 reject를 처리할 수 있음
+- catch를 이용해서 에러를 파악할 수 있음 : 가독성에 좋고, 첫번째 함수를 실행했다가 나는 에러도 잡아줄 수 있음
+- finally는 이행이든 거부든 처리가 완료되면 항상 실행됨 , 로딩화면 없앨 때 유용함
