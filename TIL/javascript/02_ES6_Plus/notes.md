@@ -1281,7 +1281,7 @@ class Bmw extends Car {
     2. 인수값을 제대로 넘겨줘야함
 
 
-# 16. 프로미스 (Promise)
+## 16. 프로미스 (Promise)
 - 비동기 작업의 결과를 넘겨줌
 ```javascript
 const pr = new Promise((resolve, reject) =>{
@@ -1356,3 +1356,396 @@ pr.then(
 - then을 이용해서 resolve와 reject를 처리할 수 있음
 - catch를 이용해서 에러를 파악할 수 있음 : 가독성에 좋고, 첫번째 함수를 실행했다가 나는 에러도 잡아줄 수 있음
 - finally는 이행이든 거부든 처리가 완료되면 항상 실행됨 , 로딩화면 없앨 때 유용함
+
+```javascript
+// 콜백지옥 예시
+const f1 = (callback) =>{
+    setTimeout(function(){
+        console.log("1번 주문 완료");
+        callback();
+    },1000);
+};
+
+const f2 = (callback) =>{
+    setTimeout(function(){
+        console.log("2번 주문 완료");
+        callback();
+    },3000);
+};
+
+
+const f3 = (callback) =>{
+    setTimeout(function(){
+        console.log("3번 주문 완료");
+        callback();
+    },2000);
+};
+
+console.log('시작');
+f1(function(){
+    f2(function(){
+        f3(function(){
+            console.log("끝");
+        });
+    });
+});
+```
+
+```javascript
+// 콜백함수가 아닌 Promise로 구현
+// 프로미스 체이닝 (Promises chaining)
+const f1 = () =>{
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("1번 주문 완료");
+        },1000);
+    });
+};
+
+const f2 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej) =>{
+        setTimeout(()=>{
+            // res("2번 주문 완료");
+            rej("xxx");
+        },3000);
+    });
+};
+
+const f3 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("3번 주문 완료");
+        },2000);
+    });
+};
+
+console.log('시작');
+f1()
+    .then((res) => f2(res))
+    .then((res) => f3(res))
+    .then((res) => console.log(res))
+    .catch(console.log)
+    .finally(()=>{
+        console.log("끝")
+    });
+
+// 토탈 6초 정도 걸림 -> 3초안에 다 끝낼수있도록 동시에 건내주는것 -> Promise.all
+```
+
+- Promise.all
+
+```javascript
+const f1 = () =>{
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("1번 주문 완료");
+        },1000);
+    });
+};
+
+const f2 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej) =>{
+        setTimeout(()=>{
+        res("2번 주문 완료");
+        
+        },3000);
+    });
+};
+
+const f3 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("3번 주문 완료");
+        },2000);
+    });
+};
+
+console.time('x')
+Promise.all([f1(), f2(), f3()]).then((res)=>{
+    console.log(res);
+    console.timeEnd('x'); // 3초 걸림
+});
+//3작업이 완료되어야 then부분이 실행 
+```
+* Promise.all 방식은 하나라도 오류가 나면 전체 오류가 나기때문에 -> 하나의 정보가 누락되면 페이지를 보여주면 안되는 경우에 사용
+
+
+- Promise.race
+```javascript
+const f1 = () =>{
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("1번 주문 완료");
+        },1000);
+    });
+};
+
+const f2 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej) =>{
+        setTimeout(()=>{
+        // res("2번 주문 완료");
+        rej(new Error("xx"))
+        },3000);
+    });
+};
+
+const f3 = (message) =>{
+    console.log(message);
+    return new Promise((res,rej)=>{
+        setTimeout(()=>{
+            res("3번 주문 완료");
+        },2000);
+    });
+};
+
+console.time('x')
+Promise.race([f1(), f2(), f3()]).then((res)=>{
+    console.log(res);
+    console.timeEnd('x'); 
+});
+```
+* 하나라도 1등으로 완료되면 끝냄 : 용량이 큰 이미지를 로딩할때 이런방식을 사용
+
+
+## 17. async, await
+- async
+    - Promise의 .then 메소드를 체인형식으로 호출하는 것 보다 가독성이 좋아짐
+
+    - async라는 키워드를 붙여주면 항상 Promise를 반환한다
+    ```javascript
+    async function getName(){
+        // return "Mike";
+        // return Promise.resolve("tom");
+        throw new Error("err...");
+    }
+    getName().catch((err)=>{
+        console.log(err);
+    })
+
+    getName().then((name)=>{
+        console.log(name);
+    })
+    ```
+    - 반환값이 Promise면 값을 그대로 사용
+    - 함수 내부에서 예외가 발생하면 reject 상태의 Promise가 반환된다
+
+- await
+    ```javascript
+    function getName(name){
+        return new Promise((resolve, reject)=>{
+            setTimeout(()=>{
+                resolve(name);
+            },1000);
+        });
+    }
+
+    async function showName(){
+        const result = await getName('Mike'); 
+        // result에 getName에서 resolve된 값을 기다렸다가 넣어줌
+        console.log(result);
+    }
+
+    console,log("시작");
+    showName();
+    ```
+    - await 키워드는 async 함수 내부에서만 사용할 수 있다 : 일반 함수에서 사용하면 에러가 발생할 수 있다
+    - await 키워드 오른쪽에는 Promise가 온다. 그 Promise가 처리될때까지 기다림
+
+
+    ```javascript
+    ``const f1 = () =>{
+        return new Promise((res,rej)=>{
+            setTimeout(()=>{
+                res("1번 주문 완료");
+            },1000);
+        });
+    };
+
+    const f2 = (message) =>{
+        console.log(message);
+        return new Promise((res,rej) =>{
+            setTimeout(()=>{
+                res("2번 주문 완료");
+        
+            },3000);
+        });
+    };
+
+    const f3 = (message) =>{
+        console.log(message);
+        return new Promise((res,rej)=>{
+            setTimeout(()=>{
+                res("3번 주문 완료");
+            },2000);
+        });
+    };
+
+    // console.log('시작');
+    // f1()
+    //     .then((res) => f2(res))
+    //     .then((res) => f3(res))
+    //     .then((res) => console.log(res))
+    //     .catch(console.log)
+    //     .finally(()=>{
+    //         console.log("끝")
+    //     });
+
+    console.log("시작");
+    async function order(){
+        const result1 = await f1();
+        const result2 = await f2(result1);
+        const result3 = await f3(result2);
+        console.log(result3);
+        console.log("종료");
+    }
+    order();
+    ```
+    * 변수에 기다렸다가 들어가는게 명확하게 보이기 때문에, Promise .then 을 쓰는 것보다 가독성이 좋다
+    * reject가 발생했을땐 try..catch 문으로 감싸주면 된다 : Promise에선 catch를 쓰지만
+    ```javascript
+    console.log("시작");
+    async function order(){
+        try{
+            const result1 = await f1();
+            const result2 = await f2(result1);
+            const result3 = await f3(result2);
+            console.log(result3);
+        }catch(e){
+            console.log(e);
+        }
+        console.log("종료");
+
+    }
+    order();
+    ```
+
+    - Promise.all 사용
+        비동기 함수를 정렬로 실행
+    ```javascript
+    console.log("시작");
+    async function order(){
+        try{
+            const result = await Promise.all([f1(),f2(),f3()]);
+            console.log(result);
+        }catch(e){
+            console.log(e);
+        }
+        console.log("종료");
+
+    }
+    order();
+    ```
+
+## 18. Generator
+- 함수의 실행을 중간에 멈췄다가 재개할 수 있는 기능
+- function 옆에 * 을 붙임
+- yield 키워드 사용 : yield에서 함수의 실행을 멈출 수 있음
+- 제너레이터 함수를 실행하면 제너레이터 객체가 반환된다
+- generator 객체는 next 메소드가 존재
+
+    ```javascript
+    function* fn() {
+    console.log(1);
+    yield 1;
+    console.log(2);
+    yield 2;
+    console.log(3);
+    console.log(4);
+    yield 3;
+    return "finish";
+    }
+        
+    const a = fn();
+    a.next(); // 가장 가까운 yield문을 만날때까지 실행되고 데이터 객체를 반환
+    a.next(); // 2
+    ```
+
+    - next() 메소드
+        가장 가까운 yield문을 만날때까지 실행되고 데이터 객체를 반환
+        반환된 데이터 객체는 value와 done 프로퍼티를 가짐
+        value는 yield 오른쪽에 있는 값임, 만약 값을 생략하면 undefinded
+        done은 함수코드가 끝났는지 나타냄, 끝났으면 true/ 아니면 false
+
+    - return() 메소드
+    ```javascript
+    a.return('END'); -> {value: "END", done: true}
+    ```
+    그 즉시 done 속성값이 true가 됨
+    이후에 next()를 실행해도 value를 얻어올수 없고 done은 true임
+
+
+    - throw() 메소드
+    ```javascript
+    a.throw(new Error('err'));
+    ```
+    generator 함수 안에 try..catch문으로 감싸고 throw() 메서드를 사용하게 되면
+    catch문이 실행이 되고 done은 true가 된다. 마찬가지로 next()메서드를 실행하면
+    done은 true이고 아무 값을 받아올 수 없는 상태가 된다
+
+
+Generator는 iterator이면서 iterable이다
+- iterable
+    - Symbol.iterator 메서드가 있다.
+    - Symbol.iterator는 iterator를 반환해야 한다.
+
+- iterator
+    - next 메서드를 가진다.
+    - next 메서드는 value와 done 속성을 가진 객체를 반환한다.
+    - 작업이 끝나면 done은 true가 된다.
+
+* 배열은 반복 가능한 객체이다 : iterable은 for...of를 이용해서 순회할 수 있다
+* 문자열도 iterable
+
+
+- next()에 인수전달
+```javascript
+function* fn(){
+    const num1 = yield "첫번째 숫자를 입력해주세요";
+    console.log(num1);
+
+    const num2 = yield "두번째 숫자를 입력해주세요";
+    console.log(num2);
+
+    return num1 + num2;
+}
+
+const a = fn();
+```
+
+- 값을 미리 만들어 두지 않음 : 메모리 관리 측면에서 효율적이다
+```javascript
+function* fn(){
+    let index = 0;
+    while(true){
+        yield index++;
+    }
+}
+
+const a = fn()
+// 무한반복문 가능, 그때그때 필요한 값을 가져올수있음
+// 필요한 순간까지 계산을 미룰 수 있음
+```
+
+- yield* : 을 이용하여 다른 generator를 불러옴
+```javascript
+function gen1(){
+    yield "W";
+    yield "o";
+    yield "r";
+    yield "l";
+    yield "d";
+
+}
+function gen2(){
+    yield "Hello";
+    yield* gen1(); // 오른쪽에는 반복가능한 모든 객체가 올 수 있다
+    yield "!";
+}
+```
+
+* 제너레이터는 다른 작업을 하다가 다시 돌아와서 next()를 해주면 진행이 멈췄던 부분 부터 이어서 실행할수있다는 장점이 있음
